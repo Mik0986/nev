@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - A Pen by Михаил</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<html>
+
+<head>
+
+   <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1" />
+ <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+ <meta name="description" content="Приложение Для просмотра ФИЛЬМОВ" />
+  
+
+  
+  <script data-name="main">
+    var playerBase = "https://cdn.jsdelivr.net/npm/venom-player@0.2.81" + '/dist/',
+      app, tryLoad = 1,
+      embedHost = "api.strvid.ws",
+      consumerHost = "tartugi.uno",
+      consumerId = 11000,
+      ancestorOrigins = location.ancestorOrigins && Array.from ? Array.from(location.ancestorOrigins) : [],
+      id = 288326,
+      franchiseID = 36426;
+    var isEmbedded;
+
+    function makePlayer(opts) {
+      var s
+      if (!window.VenomPlayer) {
+        if (tryLoad == 1) {
+          playerBase = 'https://unpkg.com/' + playerBase.slice(playerBase.indexOf('venom'));
+          s = document.createElement('script');
+          s.src = playerBase + 'player.js';
+          s.onload = function() {
+            setTimeout(function() {
+              makePlayer(opts)
+            }, 1000)
+          };
+          s.onerror = function() {
+            __s('cat=window&hit=error&label=PLAYER_LOAD_FAIL_UNPKG')
+          };
+          document.head.appendChild(s)
+        }
+        throw 'PLAYER_LOAD_FAIL_' + tryLoad++;
+      }
+      Object.assign(opts, {
+        container: document.getElementById('player'),
+        publicPath: playerBase,
+        ads: adsConfig,
+        defaultPoster: '',
+        speed: [1, 1.1, 1.25, 1.5],
+        restrictSpeed: function(s, q) {
+          return s > 1 && q > 555 ? 'Изменение скорости доступно только на низком качестве видео' : ''
+        },
+        volume: 1,
+        preventExternalSilencing: true,
+        aspectRatio: isEmbedded ? 'fill' : '16:9',
+        mini: 320,
+        reportUrl: 'https://apicollaps.cc/bug-report',
+        stats: ['wss://s.myangular.life/ws?ref_id=11000'],
+        hlsNativeParam: true,
+        dash: {
+          streaming: {
+            stableBufferTime: 120,
+            bufferTimeAtTopQualityLongForm: 120
+          }
+        },
+        time: 0,
+        soundBlock: "delete",
+        autoLandscape: true,
+        preview: {
+          interval: 5,
+          width: 180,
+          height: 110,
+          spriteSize: 100,
+          rowSize: 10,
+          src: 'https://img.zcvh.net/' + 639332 + '/desktop/thumb-${spriteNum}.webp',
+          firstNum: 1,
+          pad: 1
+        },
+        p2p: Object.assign({
+          testM: true,
+          testMhls: true,
+          packetSize: 16e3,
+          rtc: {
+            peerConnection: {
+              iceServers: [{
+                urls: "stun:stun.l.google.com:19302"
+              }],
+              bundlePolicy: "max-compat"
+            }
+          }
+        }, opts.p2p),
+        ui: Object.assign({
+          titleOnlyOnFullscreen: false,
+          pip: true,
+          about: false,
+          share: false
+        }, opts.ui),
+        translations: {
+          en: {
+            screen: 'intro',
+            repeat: 'repeat',
+            titer: 'titer',
+            pipIn: 'Picture in Picture',
+            pipOut: 'expand'
+          }
+        },
+      });
+      addEventListener('message', function(e) {
+        if (!opts.playlist) return;
+        if (e.data == 'playlist hook') {
+          opts.playlist.autoPlay = false;
+          e.source.postMessage('playlist hooked', '*');
+        } else if (e.data == 'playlist hooked play' && opts.playlist.autoPlay === false) {
+          app.play()
+        }
+      });
+      app = VenomPlayer.make(opts);
+      if (window.listen) {
+        app.onRenew = listen;
+        listen(app);
+      }
+    }
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/venom-player@0.2.81" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+ 
+      background-color: black !important;
+	padding: 200px 0px 100px 0px;
+    }
+
+
+    #player {
+
+
+
+}
+  </style>
+
+</head>
+
+<body>
+
+  <div id="player"></div>
+
+  <script data-name="ad">
+    var middleCount = 0,
+      adTimeouts = {},
+      adsConfig = {};
+  </script>
+
+    <script data-name="mk">
+		makePlayer({
+			blocked: false ,
+			title: "Лощина мертвецов",
+			id: 465915 ,
+			poster: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
+            
+			source: {
+				dash: "https://hye1eaipby4w.takedwn.ws/12_21/24/03/FRQ4TWDZ/828973.mpd",
+				hls: "https://hye1eaipby4w.takedwn.ws/12_23_21/12/23/11/OEJFHAWA/2TCHWKZR.mp4/master.m3u8",
+				audio: {"names":["Рус. Дублированный","Original"],"order":[0,1]},
+				cc: [{"url":"https://hye1eaipby4w.takedwn.ws/12_23_21/12/23/10/WS3B34GP/K7XXNOJN.vtt","name":"Eng. SDH - 1"}]
+			},
+			sections: [],
+			qualityByWidth: {"1280":720,"1920":1080,"864":480},
+			p2p: {
+				geo: ["RU","","31205"],
+				tolerance:  4 ,
+				tracker: "wss://t7.zcvh.net/v1/ws",
+				longDownload: 300 * 1000
+			}
+		});
+
+		var videoKey = 828973 ;
+    </script>
+
+</body>
+
+</html>
+<!-- partial -->
+  
+</body>
+</html>
